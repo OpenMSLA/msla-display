@@ -11,7 +11,7 @@ class Application {
 public:
     Application(TFT_eSPI& tft)
         : tft(tft), main_screen(tft, *this), initial_screen(tft, *this),
-          standby_timer(3 * 60 * 1000) {
+          standby_timer(STANDBY_TIMEOUT) {
         tft.setRotation(1);
         tft.fillScreen(TFT_BLACK);
 

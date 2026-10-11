@@ -27,8 +27,6 @@ Main::Main(TFT_eSPI& tft, Application& app)
     image_cont.add_children(&logo);
     image_cont.add_children(&preview);
 
-    bottom_card.add_children(&lbl);
-
     top_right_cont.add_children(&printer_status);
     top_right_cont.add_children(&hr1);
 
@@ -86,10 +84,17 @@ void Main::update(TouchPointType& t) {
     buttons_cont.update(t);
     left_bottom_card.update(t);
 
-    if (isPrintState(state_t)) {
-        printing_status_container.update(t);
-    } else {
-        scene.update(t);
+    switch (get_printer_state_type(state_t)) {
+        case 0:
+            printing_status_container.update(t);
+            break;
+        case 1:
+            error.update(t);
+            break;
+
+        default:
+            scene.update(t);
+            break;
     }
 
     first_draw = false;
@@ -163,9 +168,14 @@ void Main::updateState(PacketReader& pr) {
 
             break;
 
-        case 3:
+        case 3: {
             printer_status.setText("Print failed </3");
+            String err;
+            if (pr.readString(&err)) {
+                error.setText(err);
+            }
             break;
+        }
 
         case 4:
             printer_status.setText("Printer is busy");
@@ -184,21 +194,31 @@ void Main::updateState(PacketReader& pr) {
             break;
     }
 
-    if (isPrintState(last_state_t) && !isPrintState(state_t)) {
+    if (is_print_state(last_state_t) && !is_print_state(state_t)) {
         preview.reset();
         image_cont.invalidate();
     }
 
-    if (!isPrintState(last_state_t) && isPrintState(state_t)) {
+    if (!is_print_state(last_state_t) && is_print_state(state_t)) {
         preview.startLoading();
+        printing_status_container.invalidate();
     }
 
-    if (last_state_t != state_t) {
+    uint8_t current_state_type = get_printer_state_type(state_t);
+    if (last_state_type != current_state_type) {
         top_right_cont.invalidate();
-        scene.invalidate();
+
+        if (current_state_type == 1) {
+            error.invalidate();
+        }
+
+        if (current_state_type == 2) {
+            scene.invalidate();
+        }
     }
 
     last_state_t = state_t;
+    last_state_type = current_state_type;
 }
 
 void Main::updateMachineInfo(PacketReader& pr) {

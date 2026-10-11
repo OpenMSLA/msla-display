@@ -14,8 +14,8 @@ private:
     Container cont =
         Container(tft, 5, 5, TFT_HEIGHT - 10, TFT_WIDTH - 10, 5, TFT_CARD_COLOR, TFT_BG_COLOR);
 
-    Image logo = Image(tft, (TFT_HEIGHT - 120) / 2, ((TFT_WIDTH / 2) - 120) / 2 + 25, 120, 120);
-    Label loading = Label(tft, "Loading...", 0, TFT_WIDTH / 2 + 25, TFT_WHITE, TFT_CARD_COLOR, 3);
+    Image logo = Image(tft, (TFT_HEIGHT - 120) / 2, ((TFT_WIDTH / 2) - 120) / 2 + 40, 120, 120);
+    Label loading = Label(tft, "Loading...", 0, TFT_WIDTH / 2 + 40, TFT_WHITE, TFT_CARD_COLOR, 3);
 
 public:
     Initial(TFT_eSPI& tft, Application& app);

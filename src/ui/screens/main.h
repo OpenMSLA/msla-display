@@ -9,6 +9,7 @@
 #include <ui/widgets/hr.h>
 #include <ui/widgets/image.h>
 #include <ui/widgets/label.h>
+#include <ui/widgets/multiline_text.h>
 #include <ui/widgets/progressbar.h>
 #include <ui/widgets/remote_image.h>
 
@@ -18,8 +19,25 @@
 
 #define ETA_UPDATE_SECONDS 3
 
-inline bool isPrintState(uint8_t s) {
+inline bool is_print_state(uint8_t s) {
     return s == 1 || s == 2;
+}
+
+/// Returns printer states
+/// 0 - printing
+/// 1 - error
+/// 2 - others
+inline uint8_t get_printer_state_type(uint8_t s) {
+    // print state = 0
+    if (is_print_state(s))
+        return 0;
+
+    // print error = 1
+    if (s == 3)
+        return 1;
+
+    /// other states
+    return 2;
 }
 
 class Main : public Screen {
@@ -32,6 +50,8 @@ private:
     bool first_draw = true;
 
     /// STATE
+    uint8_t last_state_type = 0;
+
     uint8_t last_state_t = 0;
     uint8_t state_t = 0;
     uint16_t current_layer = 0;
@@ -104,7 +124,6 @@ private:
     Button home = Button(tft, "", 0, buttons_size * 2 + CARD_MARGIN * 2, buttons_size, buttons_size,
                          5, TFT_ACT_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
 
-    Label lbl = Label(tft, "Label", 5, 5, TFT_WHITE, TFT_CARD_COLOR, 2);
     // Button btn = Button(tft, "Btn", 10, 10, 50, 50, TFT_RED, TFT_WHITE, 2);
 
     /// --------------------------------------------
@@ -150,6 +169,12 @@ private:
 
     Label elapsed =
         Label(tft, "Elapsed: 0s", CARD_PADDING + 27, CARD_GAP + 90, TFT_WHITE, TFT_CARD_COLOR, 2);
+
+    // ------------------------------------------
+    MultilineText error =
+        MultilineText(tft, "", TFT_WIDTH / 2 + CARD_GAP + CARD_PADDING, CARD_MARGIN + 38,
+                      TFT_HEIGHT - (TFT_WIDTH / 2 + (CARD_GAP + CARD_MARGIN)) - CARD_PADDING * 2,
+                      TFT_WIDTH / 2 - 37, TFT_WHITE, TFT_CARD_COLOR, 2);
 
 public:
     Main(TFT_eSPI& tft, Application& app);

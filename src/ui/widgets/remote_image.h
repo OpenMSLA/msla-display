@@ -72,6 +72,7 @@ public:
     /// @brief Resets and invalidate image
     void reset() {
         fully_loaded = false;
+        loading_offset = 0;
     }
 
     /// @brief Sets a data request callback
