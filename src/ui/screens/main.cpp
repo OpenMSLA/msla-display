@@ -66,13 +66,14 @@ void Main::update(TouchPointType& t) {
         UARTSend(12); // MECHANICAL STATUS REQUEST
 
     if (remaining_update_timer.timeout()) {
-        if (estimated_finish_time >= ETA_UPDATE_SECONDS)
-            estimated_finish_time -= ETA_UPDATE_SECONDS;
-        else
-            estimated_finish_time = 0;
-
-        if (state_t == 1)
+        if (state_t == 1) {
             total_elapsed += 3;
+
+            if (estimated_finish_time >= ETA_UPDATE_SECONDS)
+                estimated_finish_time -= ETA_UPDATE_SECONDS;
+            else
+                estimated_finish_time = 0;
+        }
 
         remaining.setText(String("ETA: ") + String(format_duration(estimated_finish_time).c_str()));
         elapsed.setText(String("Elapsed: ") + String(format_duration(total_elapsed).c_str()));
@@ -194,12 +195,12 @@ void Main::updateState(PacketReader& pr) {
             break;
     }
 
-    if (is_print_state(last_state_t) && !is_print_state(state_t)) {
+    if (last_state_type == 0 && !is_print_state(state_t)) {
         preview.reset();
         image_cont.invalidate();
     }
 
-    if (!is_print_state(last_state_t) && is_print_state(state_t)) {
+    if (last_state_type != 0 && is_print_state(state_t)) {
         preview.startLoading();
         printing_status_container.invalidate();
     }
@@ -208,16 +209,16 @@ void Main::updateState(PacketReader& pr) {
     if (last_state_type != current_state_type) {
         top_right_cont.invalidate();
 
-        if (current_state_type == 1) {
-            error.invalidate();
-        }
-
-        if (current_state_type == 2) {
-            scene.invalidate();
+        switch (current_state_type) {
+            case 1:
+                error.invalidate();
+                break;
+            case 2:
+                scene.invalidate();
+                break;
         }
     }
 
-    last_state_t = state_t;
     last_state_type = current_state_type;
 }
 

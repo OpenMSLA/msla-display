@@ -52,7 +52,6 @@ private:
     /// STATE
     uint8_t last_state_type = 0;
 
-    uint8_t last_state_t = 0;
     uint8_t state_t = 0;
     uint16_t current_layer = 0;
     uint16_t total_layers = 0;
