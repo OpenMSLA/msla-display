@@ -2,7 +2,7 @@
 
 Main::Main(TFT_eSPI& tft, Application& app)
     : Screen(tft, app, "main"), global_state_timer(5000), physical_state_timer(1500),
-      remaining_update_timer(ETA_UPDATE_SECONDS * 1000) {
+      remaining_update_timer(ETA_UPDATE_SECONDS * 1000), network_status_timer(5000) {
     stack_image.loadImage("/stack.rgb565");
     remaining_image.loadImage("/clock.rgb565");
     logo.loadImage("/logo.rgb565");
@@ -53,6 +53,8 @@ Main::Main(TFT_eSPI& tft, Application& app)
     left_bottom_card.add_children(&uv_image);
     left_bottom_card.add_children(&uv_state);
     left_bottom_card.add_children(&core_ver);
+
+    bottom_card.add_children(&ip_label);
 }
 
 void Main::update(TouchPointType& t) {
@@ -64,6 +66,9 @@ void Main::update(TouchPointType& t) {
 
     if (physical_state_timer.timeout() || first_draw)
         UARTSend(12); // MECHANICAL STATUS REQUEST
+
+    if (network_status_timer.timeout())
+        UARTSend(16); // NETWORK STATUS
 
     if (remaining_update_timer.timeout()) {
         if (state_t == 1) {
@@ -124,10 +129,34 @@ void Main::onUART(PacketReader& pr) {
             break;
         }
 
+        /// NETWORK STATUS
+        case 17: {
+            updateNetworkStatus(pr);
+            break;
+        }
+
         /// PRINTING PREVIEW
         case 21:
             preview.onUART(pr);
             break;
+    }
+}
+
+void Main::updateNetworkStatus(PacketReader& pr) {
+    uint8_t ip_available;
+    if (pr.readUInt8(ip_available) && ip_available == 1) {
+        uint8_t octets[4];
+        bool error = false;
+
+        for (auto& octet : octets) {
+            error = error || !pr.readUInt8(octet);
+        }
+
+        if (!error)
+            ip_label.setText(String(octets[0]) + "." + String(octets[1]) + "." + String(octets[2]) +
+                             "." + String(octets[3]));
+    } else {
+        ip_label.setText("Network unavailable");
     }
 }
 

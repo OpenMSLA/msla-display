@@ -45,6 +45,7 @@ private:
     Timer global_state_timer;
     Timer physical_state_timer;
     Timer remaining_update_timer;
+    Timer network_status_timer;
 
     bool machine_info_loaded = false;
     bool first_draw = true;
@@ -175,6 +176,9 @@ private:
                       TFT_HEIGHT - (TFT_WIDTH / 2 + (CARD_GAP + CARD_MARGIN)) - CARD_PADDING * 2,
                       TFT_WIDTH / 2 - 37, TFT_WHITE, TFT_CARD_COLOR, 2);
 
+    Label ip_label =
+        Label(tft, "Network unavailable", CARD_PADDING, CARD_PADDING, TFT_WHITE, TFT_CARD_COLOR, 2);
+
 public:
     Main(TFT_eSPI& tft, Application& app);
 
@@ -184,9 +188,15 @@ public:
 
     void invalidate() override;
 
+    /// @brief Update current global printer state
     void updateState(PacketReader& pr);
 
+    /// @brief Update mechanical status of printer (z pos, uv)
     void updateMechanicalState(PacketReader& pr);
 
+    /// @brief Update machine info (name, version)
     void updateMachineInfo(PacketReader& pr);
+
+    /// @brief Update network status (ip)
+    void updateNetworkStatus(PacketReader& pr);
 };
