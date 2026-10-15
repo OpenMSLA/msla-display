@@ -32,3 +32,9 @@
 #define TFT_ACT_COLOR 0x0576
 
 #define STANDBY_TIMEOUT 1000 * 60 * 3
+
+/// ---------------------------- LAYOUT ------------------------------
+
+#define CARD_MARGIN 5
+#define CARD_GAP 10
+#define CARD_PADDING 10

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "config.h"
 #include "uart/packet.h"
 #include "ui/widgets/widget.h"

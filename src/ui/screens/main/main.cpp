@@ -1,5 +1,7 @@
 #include "main.h"
 
+#include "ui/app.h"
+
 Main::Main(TFT_eSPI& tft, Application& app)
     : Screen(tft, app, "main"), global_state_timer(5000), physical_state_timer(1500),
       remaining_update_timer(ETA_UPDATE_SECONDS * 1000), network_status_timer(5000) {
@@ -55,6 +57,9 @@ Main::Main(TFT_eSPI& tft, Application& app)
     left_bottom_card.add_children(&core_ver);
 
     bottom_card.add_children(&ip_label);
+    bottom_card.add_children(&test);
+
+    btn1.setPressedCallback([this]() { this->app.setScreen("usb"); });
 }
 
 void Main::update(TouchPointType& t) {
@@ -268,4 +273,11 @@ void Main::invalidate() {
     bottom_card.invalidate();
     buttons_cont.invalidate();
     left_bottom_card.invalidate();
+
+    printing_status_container.invalidate();
+    error.invalidate();
+    scene.invalidate();
+
+    preview.reset();
+    preview.startLoading();
 }

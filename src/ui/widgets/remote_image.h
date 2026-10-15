@@ -14,8 +14,6 @@ private:
     int lines_per_packet;
     int loading_offset;
 
-    bool fully_loaded = false;
-
     std::function<void(uint16_t h, uint16_t request_bytes, uint16_t offset_bytes)>
         request_next_callback = nullptr;
 
@@ -25,6 +23,8 @@ private:
     }
 
 public:
+    bool fully_loaded = false;
+
     RemoteImage(TFT_eSPI& tft, int x, int y, int w, int h, int lines_per_packet)
         : w(w), h(h), lines_per_packet(lines_per_packet), Widget(tft, x, y) {
         dirty = false;

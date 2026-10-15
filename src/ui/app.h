@@ -1,8 +1,9 @@
 #pragma once
 
-#include "screens/initial.h"
-#include "screens/main.h"
+#include "screens/initial/initial.h"
+#include "screens/main/main.h"
 #include "screens/screen.h"
+#include "screens/usb/usb.h"
 
 #include <FT6336U.h>
 #include <TFT_eSPI.h>
@@ -10,8 +11,8 @@
 class Application {
 public:
     Application(TFT_eSPI& tft)
-        : tft(tft), main_screen(tft, *this), initial_screen(tft, *this),
-          standby_timer(STANDBY_TIMEOUT) {
+        : tft(tft), main_screen(tft, *this), initial_screen(tft, *this), usb_screen(tft, *this),
+          standby_timer(STANDBY_TIMEOUT * 10000) {
         tft.setRotation(1);
         tft.fillScreen(TFT_BLACK);
 
@@ -20,8 +21,9 @@ public:
 
         screens.push_back(&main_screen);
         screens.push_back(&initial_screen);
+        screens.push_back(&usb_screen);
 
-        setScreen("initial");
+        setScreen("main");
     }
 
     void update(FT6336U& touch) {
@@ -83,6 +85,7 @@ private:
 
     Initial initial_screen;
     Main main_screen;
+    Usb usb_screen;
 
     std::vector<Screen*> screens;
     size_t current_screen = 0;

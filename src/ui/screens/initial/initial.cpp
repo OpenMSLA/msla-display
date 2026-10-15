@@ -2,7 +2,8 @@
 
 #include "ui/app.h"
 
-Initial::Initial(TFT_eSPI& tft, Application& app) : Screen(tft, app, "initial") {
+Initial::Initial(TFT_eSPI& tft, Application& app)
+    : Screen(tft, app, "initial"), update_timer(5000) {
     logo.loadImage("/logo.rgb565");
 
     uint8_t s = tft.textsize;
@@ -15,10 +16,9 @@ Initial::Initial(TFT_eSPI& tft, Application& app) : Screen(tft, app, "initial") 
 }
 
 void Initial::update(TouchPointType& t) {
-    unsigned long mill = millis();
-    if (mill - status_request_last_time > 5000 || status_request_last_time == 0) {
-        status_request_last_time = mill;
+    if (update_timer.timeout() || first_update) {
         UARTSend(10); // STATUS REQUEST
+        first_update = false;
     }
 
     cont.update(t);

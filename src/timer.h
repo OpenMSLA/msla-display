@@ -4,6 +4,8 @@ class Timer {
 public:
     Timer(int period);
 
+    Timer(int period, bool first);
+
     /// @brief  Resets timer
     void reset();
 
@@ -13,4 +15,7 @@ public:
 private:
     unsigned long lt;
     int period;
+
+    bool first = false;
+    bool first_check = true;
 };

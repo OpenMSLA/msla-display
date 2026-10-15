@@ -1,5 +1,9 @@
 #pragma once
+#include "config.h"
+
 #include <Arduino.h>
+#include <FT6336U.h>
+#include <TFT_eSPI.h>
 
 /// @brief Darken TFT color
 inline uint16_t darken(uint16_t color, uint8_t amount) {

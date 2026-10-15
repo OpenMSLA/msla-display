@@ -1,7 +1,7 @@
 #pragma once
 
-#include "screen.h"
 #include "uart/uart.h"
+#include "ui/screens/screen.h"
 
 #include <timer.h>
 #include <ui/widgets/button.h>
@@ -12,10 +12,6 @@
 #include <ui/widgets/multiline_text.h>
 #include <ui/widgets/progressbar.h>
 #include <ui/widgets/remote_image.h>
-
-#define CARD_MARGIN 5
-#define CARD_GAP 10
-#define CARD_PADDING 10
 
 #define ETA_UPDATE_SECONDS 3
 
@@ -178,6 +174,12 @@ private:
 
     Label ip_label =
         Label(tft, "Network unavailable", CARD_PADDING, CARD_PADDING, TFT_WHITE, TFT_CARD_COLOR, 2);
+
+    MultilineText test =
+        MultilineText(tft, "", CARD_PADDING, CARD_PADDING + 16,
+                      TFT_HEIGHT - (CARD_MARGIN * 2) - buttons_size -
+                          (TFT_WIDTH / 2 + CARD_PADDING + 5 + CARD_GAP) - CARD_PADDING * 2,
+                      (TFT_WIDTH / 2 + CARD_PADDING + 5 + CARD_GAP), TFT_WHITE, TFT_CARD_COLOR, 1);
 
 public:
     Main(TFT_eSPI& tft, Application& app);

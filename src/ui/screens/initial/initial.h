@@ -1,7 +1,8 @@
 #pragma once
 
-#include "screen.h"
+#include "timer.h"
 #include "uart/uart.h"
+#include "ui/screens/screen.h"
 
 #include <ui/widgets/container.h>
 #include <ui/widgets/image.h>
@@ -9,7 +10,8 @@
 
 class Initial : public Screen {
 private:
-    unsigned long status_request_last_time = 0;
+    Timer update_timer;
+    bool first_update = true;
 
     Container cont =
         Container(tft, 5, 5, TFT_HEIGHT - 10, TFT_WIDTH - 10, 5, TFT_CARD_COLOR, TFT_BG_COLOR);

@@ -2,6 +2,7 @@
 
 #include <FT6336U.h>
 #include <TFT_eSPI.h>
+#include <vector>
 
 class Widget {
 public:

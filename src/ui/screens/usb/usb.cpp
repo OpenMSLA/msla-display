@@ -1,0 +1,107 @@
+#include "usb.h"
+
+#include "ui/app.h"
+
+Usb::Usb(TFT_eSPI& tft, Application& app) : Screen(tft, app, "usb"), requesting_timer(2000, true) {
+    back_image.loadImage("/lchevron.rgb565");
+    back_button.add_children(&back_image);
+
+    back_button.setPressedCallback([this]() { this->request(0, this->current_parent_id); });
+
+    home_image.loadImage("/home-d.rgb565");
+    home_button.add_children(&home_image);
+
+    home_button.setPressedCallback([this]() { this->app.setScreen("main"); });
+
+    main_container.add_children(&file_button_1);
+    main_container.add_children(&file_button_2);
+    main_container.add_children(&file_button_3);
+    main_container.add_children(&file_button_4);
+
+    file_button_1.add_children(&file_card_1);
+    file_button_2.add_children(&file_card_2);
+    file_button_3.add_children(&file_card_3);
+    file_button_4.add_children(&file_card_4);
+}
+
+void Usb::update(TouchPointType& t) {
+    if (requesting && (requesting_timer.timeout() || first_request)) {
+        /// Request folder
+        sendRequest();
+        first_request = false;
+    }
+
+    top_container.update(t);
+    main_container.update(t);
+    back_button.update(t);
+    home_button.update(t);
+}
+
+void Usb::onUART(PacketReader& pr) {
+    uint8_t id;
+
+    FileCard* arr[4] = {&file_card_1, &file_card_2, &file_card_3, &file_card_4};
+    Button* buttons_arr[4] = {&file_button_1, &file_button_2, &file_button_3, &file_button_4};
+
+    for (auto card : arr) {
+        card->set_available(false);
+    }
+
+    if (pr.readUInt8(id) && id == 71) {
+        pr.readUInt16(current_parent_id);
+
+        uint16_t count;
+        pr.readUInt16(count);
+
+        for (int x = 0; x < count; x++) {
+            uint16_t id;
+            uint8_t ft;
+            String name;
+
+            pr.readUInt16(id);
+            pr.readUInt8(ft);
+            pr.readString(&name);
+
+            if (x < sizeof(arr) / sizeof(FileCard*)) {
+                arr[x]->set_file(name, id, current_parent_id, ft);
+                arr[x]->set_available(true);
+
+                if (ft == 0) {
+                    buttons_arr[x]->setPressedCallback([this]() {});
+                } else {
+                    buttons_arr[x]->setPressedCallback([this, id]() { this->request(0, id); });
+                }
+            }
+        }
+        main_container.invalidate();
+        requesting = false;
+    }
+}
+
+void Usb::invalidate() {
+    tft.fillScreen(TFT_BG_COLOR);
+
+    top_container.invalidate();
+    main_container.invalidate();
+    back_button.invalidate();
+    home_button.invalidate();
+}
+
+void Usb::sendRequest() {
+    PacketWriter pw;
+    pw.write((uint8_t)70); // packet id
+    pw.write((uint16_t)requesting_folder_id);
+    pw.write((uint16_t)page);
+    pw.write((uint16_t)take);
+
+    UARTSend(pw);
+}
+
+void Usb::request(uint16_t page, uint16_t id) {
+    this->page = page;
+    this->requesting_folder_id = id;
+
+    this->requesting = true;
+    this->requesting_timer.reset();
+    this->first_request = true;
+}
