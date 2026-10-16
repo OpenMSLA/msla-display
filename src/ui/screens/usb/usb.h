@@ -17,6 +17,7 @@ private:
     uint16_t requesting_folder_id = 0;
 
     uint16_t current_parent_id = 0;
+    uint16_t total_entries = 0;
 
     bool requesting = true;
     bool first_request = true;
@@ -24,7 +25,10 @@ private:
 
     Container top_container =
         Container(tft, CARD_MARGIN * 3 + 50 * 2, CARD_MARGIN,
-                  TFT_HEIGHT - (CARD_MARGIN * 4 + 50 * 2), 50, 5, TFT_CARD_COLOR, TFT_BG_COLOR);
+                  TFT_HEIGHT - (CARD_MARGIN * 6 + 50 * 4), 50, 5, TFT_CARD_COLOR, TFT_BG_COLOR);
+
+    Label header =
+        Label(tft, "", top_container.w / 2, top_container.h / 2, TFT_WHITE, TFT_CARD_COLOR, 2);
 
     int main_card_width = TFT_HEIGHT - 10;
 
@@ -41,6 +45,16 @@ private:
 
     Button home_button = Button(tft, "", CARD_MARGIN * 2 + 50, CARD_MARGIN, 50, 50, 5,
                                 TFT_CARD_COLOR, TFT_TRANSPARENT, TFT_BG_COLOR, 1);
+
+    Image page_next_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2, 24, 24);
+
+    Button page_next_button = Button(tft, "", TFT_HEIGHT - CARD_MARGIN - 50, CARD_MARGIN, 50, 50, 5,
+                                     TFT_CARD_COLOR, TFT_TRANSPARENT, TFT_BG_COLOR, 1);
+
+    Image page_prev_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2, 24, 24);
+
+    Button page_prev_button = Button(tft, "", TFT_HEIGHT - (CARD_MARGIN * 2 + 50 * 2), CARD_MARGIN,
+                                     50, 50, 5, TFT_CARD_COLOR, TFT_TRANSPARENT, TFT_BG_COLOR, 1);
 
     Button file_button_1 =
         Button(tft, "", CARD_PADDING, CARD_PADDING, main_card_width - (CARD_PADDING * 2), 50, 5,

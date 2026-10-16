@@ -23,7 +23,7 @@ public:
         screens.push_back(&initial_screen);
         screens.push_back(&usb_screen);
 
-        setScreen("main");
+        setScreen("initial");
     }
 
     void update(FT6336U& touch) {

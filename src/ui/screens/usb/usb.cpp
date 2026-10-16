@@ -3,7 +3,7 @@
 #include "ui/app.h"
 
 Usb::Usb(TFT_eSPI& tft, Application& app) : Screen(tft, app, "usb"), requesting_timer(2000, true) {
-    back_image.loadImage("/lchevron.rgb565");
+    back_image.loadImage("/back.rgb565");
     back_button.add_children(&back_image);
 
     back_button.setPressedCallback([this]() { this->request(0, this->current_parent_id); });
@@ -12,6 +12,28 @@ Usb::Usb(TFT_eSPI& tft, Application& app) : Screen(tft, app, "usb"), requesting_
     home_button.add_children(&home_image);
 
     home_button.setPressedCallback([this]() { this->app.setScreen("main"); });
+
+    page_prev_image.loadImage("/arrowl.rgb565");
+    page_prev_button.add_children(&page_prev_image);
+    page_prev_button.setPressedCallback([this]() {
+        if (page == 0)
+            return;
+
+        page = page >= 1 ? page - 1 : 0;
+        this->request(page, this->requesting_folder_id);
+    });
+
+    page_next_image.loadImage("/arrowr.rgb565");
+    page_next_button.add_children(&page_next_image);
+    page_next_button.setPressedCallback([this]() {
+        uint16_t max_page = ceil(total_entries / (float)take) - 1;
+
+        if (page == max_page)
+            return;
+
+        page = min(uint16_t(page + 1), max_page);
+        this->request(page, this->requesting_folder_id);
+    });
 
     main_container.add_children(&file_button_1);
     main_container.add_children(&file_button_2);
@@ -22,6 +44,8 @@ Usb::Usb(TFT_eSPI& tft, Application& app) : Screen(tft, app, "usb"), requesting_
     file_button_2.add_children(&file_card_2);
     file_button_3.add_children(&file_card_3);
     file_button_4.add_children(&file_card_4);
+
+    top_container.add_children(&header);
 }
 
 void Usb::update(TouchPointType& t) {
@@ -35,6 +59,9 @@ void Usb::update(TouchPointType& t) {
     main_container.update(t);
     back_button.update(t);
     home_button.update(t);
+
+    page_next_button.update(t);
+    page_prev_button.update(t);
 }
 
 void Usb::onUART(PacketReader& pr) {
@@ -73,6 +100,12 @@ void Usb::onUART(PacketReader& pr) {
                 }
             }
         }
+        pr.readUInt16(total_entries);
+
+        header.setCentering(true, true);
+        header.setText("Page " + String(page + 1) + "/" +
+                       String(max(1, (int)ceil(total_entries / (float)take))));
+
         main_container.invalidate();
         requesting = false;
     }
@@ -85,6 +118,9 @@ void Usb::invalidate() {
     main_container.invalidate();
     back_button.invalidate();
     home_button.invalidate();
+
+    page_next_button.invalidate();
+    page_prev_button.invalidate();
 }
 
 void Usb::sendRequest() {

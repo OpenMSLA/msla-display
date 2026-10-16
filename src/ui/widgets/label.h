@@ -10,6 +10,9 @@ private:
 
     DirtyArea dirty_area;
 
+    bool center_x = false;
+    bool center_y = false;
+
 public:
     String text;
     uint8_t font_size = 1;
@@ -23,8 +26,14 @@ public:
         tft.setTextColor(this->text_color, this->bg_color);
         tft.setTextSize(this->font_size);
 
+        uint16_t w = tft.textWidth(text);
+        uint16_t h = tft.fontHeight();
+
+        uint16_t x = center_x ? getX() - w / 2 : getX();
+        uint16_t y = center_y ? getY() - h / 2 : getY();
+
         tft.fillRect(dirty_area.x, dirty_area.y, dirty_area.w, dirty_area.h, this->bg_color);
-        tft.drawString(this->text, getX(), getY());
+        tft.drawString(this->text, x, y);
     };
 
     void update(TouchPointType& touch) override {
@@ -43,9 +52,17 @@ public:
         int font_h = tft.fontHeight();
         tft.setTextSize(s);
 
-        this->dirty_area = DirtyArea(getX(), getY(), text_w, font_h);
+        uint16_t x = center_x ? getX() - text_w / 2 : getX();
+        uint16_t y = center_y ? getY() - font_h / 2 : getY();
+
+        this->dirty_area = DirtyArea(x, y, text_w, font_h);
 
         this->text = str;
         this->invalidate();
     };
+
+    void setCentering(bool x, bool y) {
+        center_x = x;
+        center_y = y;
+    }
 };

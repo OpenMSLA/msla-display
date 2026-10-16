@@ -64,6 +64,9 @@ public:
             icon.loadImage("/folder.rgb565");
         }
 
+        if (name.length() > 29)
+            name = name.substring(0, 29) + "...";
+
         invalidate();
     }
 
