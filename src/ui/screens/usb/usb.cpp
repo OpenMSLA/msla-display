@@ -121,6 +121,16 @@ void Usb::invalidate() {
 
     page_next_button.invalidate();
     page_prev_button.invalidate();
+
+    page = 0;
+    requesting_folder_id = 0;
+
+    current_parent_id = 0;
+    total_entries = 0;
+
+    requesting = true;
+    first_request = true;
+    requesting_timer.reset();
 }
 
 void Usb::sendRequest() {

@@ -18,6 +18,7 @@ private:
     int r;
 
     bool pressed = false;
+    bool enabled = true;
 
     std::function<void()> fn_pressed = nullptr;
     std::function<void()> fn_released = nullptr;
@@ -51,7 +52,7 @@ public:
         bool inside = touch.x >= x && touch.x <= x + width && touch.y >= y && touch.y <= y + height;
 
         if ((touch.status == TouchStatusEnum::touch || touch.status == TouchStatusEnum::stream) &&
-            inside) {
+            inside && enabled) {
             if (!pressed) {
                 if (fn_pressed)
                     fn_pressed();
@@ -71,22 +72,36 @@ public:
         redraw();
 
         updateChildren(touch);
-        this->dirty = false;
+        dirty = false;
     };
 
     /// @brief Set button pressed callback
     void setPressedCallback(std::function<void()> fn) {
-        this->fn_pressed = fn;
+        fn_pressed = fn;
     };
 
     /// @brief Set button released callback
     void setReleasedCallback(std::function<void()> fn) {
-        this->fn_released = fn;
+        fn_released = fn;
     };
 
     /// @brief Set button text
     void setText(String str) {
-        this->text = str;
-        this->invalidate();
+        text = str;
+        invalidate();
     };
+
+    /// @brief Set button enabled state
+    void setEnabled(bool en) {
+        if (enabled == en)
+            return;
+
+        enabled = en;
+        invalidate();
+    };
+
+    /// @brief Is button enabled?
+    bool isEnabled() {
+        return enabled;
+    }
 };

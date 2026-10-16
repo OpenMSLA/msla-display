@@ -47,6 +47,7 @@ private:
     bool first_draw = true;
 
     /// STATE
+    uint8_t flags_array = 0;
     uint8_t last_state_type = 0;
 
     uint8_t state_t = 0;
@@ -101,24 +102,33 @@ private:
 
     Container bottom_card =
         Container(tft, TFT_WIDTH / 2 + CARD_PADDING + 5 + CARD_GAP, TFT_WIDTH / 2 + CARD_GAP,
-                  TFT_HEIGHT - (CARD_MARGIN * 2) - buttons_size -
+                  TFT_HEIGHT - (CARD_MARGIN * 2) - buttons_size * 2.6 -
                       (TFT_WIDTH / 2 + CARD_PADDING + 5 + CARD_GAP),
                   TFT_WIDTH / 2 - (CARD_GAP + CARD_MARGIN), 5, TFT_CARD_COLOR, TFT_BG_COLOR);
 
-    Container buttons_cont = Container(
-        tft, TFT_HEIGHT - (CARD_MARGIN + buttons_size), TFT_WIDTH / 2 + CARD_GAP, buttons_size,
-        TFT_WIDTH / 2 - (CARD_GAP + CARD_MARGIN), 5, TFT_BG_COLOR, TFT_BG_COLOR);
+    Container buttons_cont =
+        Container(tft, TFT_HEIGHT - (CARD_MARGIN + buttons_size * 2.6), TFT_WIDTH / 2 + CARD_GAP,
+                  buttons_size * 2.6, TFT_WIDTH / 2 - (CARD_GAP + CARD_MARGIN), 5, TFT_BG_COLOR,
+                  TFT_BG_COLOR);
 
-    Button btn1 = Button(tft, "1", 0, 0, buttons_size, buttons_size, 5, TFT_GREEN, TFT_WHITE,
-                         TFT_BG_COLOR, 2);
+    Label usb_label = Label(tft, "Print", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_WHITE,
+                            TFT_ACT_COLOR, 2);
 
-    Button btn2 = Button(tft, "2", 0, buttons_size + CARD_MARGIN, buttons_size, buttons_size, 5,
-                         TFT_GREEN, TFT_WHITE, TFT_BG_COLOR, 2);
+    Image usb_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+
+    Button usb_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, TFT_ACT_COLOR,
+                            TFT_WHITE, TFT_BG_COLOR, 2);
+
+    Button btn2 = Button(tft, "2", 0, buttons_size + CARD_MARGIN, buttons_size * 2.6, buttons_size,
+                         5, TFT_GREEN, TFT_WHITE, TFT_BG_COLOR, 2);
+
+    Label home_label = Label(tft, "Home", (buttons_size - 24) / 2 + 35, buttons_size / 2, TFT_WHITE,
+                             TFT_ACT_COLOR, 2);
 
     Image home_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
 
-    Button home = Button(tft, "", 0, buttons_size * 2 + CARD_MARGIN * 2, buttons_size, buttons_size,
-                         5, TFT_ACT_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
+    Button home = Button(tft, "", 0, buttons_size * 2 + CARD_MARGIN * 2, buttons_size * 2.6,
+                         buttons_size, 5, TFT_ACT_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
 
     // Button btn = Button(tft, "Btn", 10, 10, 50, 50, TFT_RED, TFT_WHITE, 2);
 
@@ -173,13 +183,7 @@ private:
                       TFT_WIDTH / 2 - 37, TFT_WHITE, TFT_CARD_COLOR, 2);
 
     Label ip_label =
-        Label(tft, "Network unavailable", CARD_PADDING, CARD_PADDING, TFT_WHITE, TFT_CARD_COLOR, 2);
-
-    MultilineText test =
-        MultilineText(tft, "", CARD_PADDING, CARD_PADDING + 16,
-                      TFT_HEIGHT - (CARD_MARGIN * 2) - buttons_size -
-                          (TFT_WIDTH / 2 + CARD_PADDING + 5 + CARD_GAP) - CARD_PADDING * 2,
-                      (TFT_WIDTH / 2 + CARD_PADDING + 5 + CARD_GAP), TFT_WHITE, TFT_CARD_COLOR, 1);
+        Label(tft, "Network unavailable", CARD_PADDING, CARD_PADDING, TFT_WHITE, TFT_CARD_COLOR, 1);
 
 public:
     Main(TFT_eSPI& tft, Application& app);

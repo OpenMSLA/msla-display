@@ -15,6 +15,7 @@ Main::Main(TFT_eSPI& tft, Application& app)
     uv_image.loadImage("/uv.rgb565");
 
     scene.loadImage("/scene.rgb565");
+    usb_image.loadImage("/usb_off.rgb565");
 
     preview.setRequestCallback([](uint16_t h, uint16_t request_bytes, uint16_t offset_bytes) {
         PacketWriter pw;
@@ -43,12 +44,15 @@ Main::Main(TFT_eSPI& tft, Application& app)
     printing_status_container.add_children(&elapsed_image);
     printing_status_container.add_children(&elapsed);
 
-    home.setPressedCallback([this]() { UARTSend(56); });
-
-    buttons_cont.add_children(&btn1);
+    buttons_cont.add_children(&usb_btn);
     buttons_cont.add_children(&btn2);
     buttons_cont.add_children(&home);
+
+    home.setPressedCallback([this]() { UARTSend(56); });
     home.add_children(&home_image);
+    home.add_children(&home_label);
+
+    home_label.setCentering(false, true);
 
     left_bottom_card.add_children(&z_pos_image);
     left_bottom_card.add_children(&z_pos);
@@ -57,9 +61,13 @@ Main::Main(TFT_eSPI& tft, Application& app)
     left_bottom_card.add_children(&core_ver);
 
     bottom_card.add_children(&ip_label);
-    bottom_card.add_children(&test);
 
-    btn1.setPressedCallback([this]() { this->app.setScreen("usb"); });
+    usb_btn.add_children(&usb_image);
+    usb_btn.add_children(&usb_label);
+    usb_btn.setPressedCallback([this]() { this->app.setScreen("usb"); });
+    usb_btn.setEnabled(false);
+
+    usb_label.setCentering(false, true);
 }
 
 void Main::update(TouchPointType& t) {
@@ -119,8 +127,7 @@ void Main::onUART(PacketReader& pr) {
     switch (id) {
         /// GLOBAL STATUS RESPONSE
         case 11:
-            if (pr.readUInt8(state_t))
-                updateState(pr);
+            updateState(pr);
             break;
 
         /// MECHANICAL STATUS RESPONSE
@@ -174,6 +181,16 @@ void Main::updateMechanicalState(PacketReader& pr) {
 }
 
 void Main::updateState(PacketReader& pr) {
+    pr.readUInt8(flags_array);
+    usb_btn.setEnabled(flags_array & (1 << 0));
+
+    if (usb_btn.isEnabled())
+        usb_image.loadImage("/usb.rgb565");
+    else
+        usb_image.loadImage("/usb_off.rgb565");
+
+    pr.readUInt8(state_t);
+
     switch (state_t) {
         case 0:
             printer_status.setText("Printer is idle");
