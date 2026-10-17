@@ -30,8 +30,39 @@ public:
         int text_size = font_size;
         int line_index = 0;
         int shrinkage_offset = 0;
+
         String line;
         String word;
+
+        auto drawLine = [&]() {
+            if (line.isEmpty())
+                return;
+
+            tft.drawString(line, getX(),
+                           getY() + (tft.fontHeight() + 3) * line_index + shrinkage_offset);
+
+            line.clear();
+            line_index++;
+        };
+
+        auto addWord = [&](const String& word) {
+            if (word.isEmpty())
+                return;
+
+            if (!line.isEmpty() && tft.textWidth(line + word) > w) {
+                drawLine();
+            }
+
+            for (int j = 0; j < word.length(); j++) {
+                char c = word[j];
+
+                if (!line.isEmpty() && tft.textWidth(line + c) > w) {
+                    drawLine();
+                }
+
+                line += c;
+            }
+        };
 
         for (int i = 0; i < text.length(); i++) {
             char c = text[i];
@@ -42,28 +73,26 @@ public:
             }
 
             int offset_y = (tft.fontHeight() + 3) * line_index;
+
             if ((float)offset_y / (float)h > 0.5 && (float)i / (float)text.length() < 0.5 &&
                 shrinkage_offset == 0) {
+
                 text_size = 1;
                 tft.setTextSize(text_size);
+
                 shrinkage_offset = offset_y;
                 line_index = 0;
             }
 
-            if (!line.isEmpty() && tft.textWidth(line + word) > w) {
-                tft.drawString(line, getX(),
-                               getY() + (tft.fontHeight() + 3) * line_index + shrinkage_offset);
-                line = word;
-                line_index++;
-            } else {
-                line += word;
-            }
-
-            line += ' ';
+            addWord(word);
             word.clear();
+
+            if (!line.isEmpty() && tft.textWidth(line + ' ') <= w) {
+                line += ' ';
+            }
         }
 
-        line += word;
+        addWord(word);
 
         if (!line.isEmpty()) {
             tft.drawString(line, getX(),

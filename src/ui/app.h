@@ -3,6 +3,7 @@
 #include "screens/initial/initial.h"
 #include "screens/main/main.h"
 #include "screens/screen.h"
+#include "screens/usb/model_preview/model_preview.h"
 #include "screens/usb/usb.h"
 
 #include <FT6336U.h>
@@ -10,9 +11,14 @@
 
 class Application {
 public:
+    Initial initial_screen;
+    Main main_screen;
+    Usb usb_screen;
+    ModelPreview model_preview;
+
     Application(TFT_eSPI& tft)
         : tft(tft), main_screen(tft, *this), initial_screen(tft, *this), usb_screen(tft, *this),
-          standby_timer(STANDBY_TIMEOUT * 10000) {
+          model_preview(tft, *this), standby_timer(STANDBY_TIMEOUT * 10000) {
         tft.setRotation(1);
         tft.fillScreen(TFT_BLACK);
 
@@ -22,6 +28,7 @@ public:
         screens.push_back(&main_screen);
         screens.push_back(&initial_screen);
         screens.push_back(&usb_screen);
+        screens.push_back(&model_preview);
 
         setScreen("initial");
     }
@@ -45,7 +52,13 @@ public:
 
         if (standby_timer.timeout() && !standby) {
             setBacklight(0);
+
             standby = true;
+        }
+
+        if (screen_dirty) {
+            screens[current_screen]->invalidate();
+            screen_dirty = false;
         }
 
         screens[current_screen]->update(t);
@@ -60,8 +73,9 @@ public:
         for (auto sc : screens) {
             if (sc->screen_name == name) {
                 current_screen = i;
-                screens[current_screen]->invalidate();
+                screen_dirty = true;
                 standby = false;
+                post_standby_touch_supress = true;
 
                 break;
             }
@@ -83,10 +97,6 @@ public:
 private:
     TFT_eSPI& tft;
 
-    Initial initial_screen;
-    Main main_screen;
-    Usb usb_screen;
-
     std::vector<Screen*> screens;
     size_t current_screen = 0;
 
@@ -94,4 +104,5 @@ private:
     bool standby = false;
 
     bool post_standby_touch_supress = false;
+    bool screen_dirty = false;
 };

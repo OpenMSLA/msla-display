@@ -47,3 +47,20 @@ inline TouchPointType getTouch(FT6336U& touch) {
 
     return t;
 }
+
+/// @brief Convert bytes to formatted string
+inline String format_size(uint32_t bytes) {
+    float kb = bytes / 1024.f;
+    float mb = kb / 1024.f;
+    float gb = mb / 1024.f;
+
+    if (kb < 0.5) {
+        return String(bytes, 2) + "B";
+    } else if (mb < 0.5) {
+        return String(kb, 2) + "KB";
+    } else if (gb < 0.5) {
+        return String(mb, 2) + "MB";
+    } else {
+        return String(gb, 2) + "GB";
+    }
+}

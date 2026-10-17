@@ -104,4 +104,13 @@ public:
     bool isEnabled() {
         return enabled;
     }
+
+    void setFgColor(uint16_t c) {
+        if (fg_color == c) {
+            return;
+        }
+
+        fg_color = c;
+        invalidate();
+    }
 };

@@ -285,6 +285,8 @@ void Main::updateMachineInfo(PacketReader& pr) {
 void Main::invalidate() {
     tft.fillScreen(TFT_BG_COLOR);
 
+    global_state_timer.reset();
+
     image_cont.invalidate();
     top_right_cont.invalidate();
     bottom_card.invalidate();

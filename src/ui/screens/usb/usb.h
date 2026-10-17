@@ -84,6 +84,9 @@ private:
     FileCard file_card_4 = FileCard(tft, 0, 0, main_card_width - (CARD_PADDING * 2), 50, 5,
                                     TFT_EL_COLOR, TFT_CARD_COLOR, TFT_WHITE);
 
+    Label nothing_to_c = Label(tft, "Nothing 2 c here :(", main_container.w / 2,
+                               main_container.h / 2, TFT_WHITE, TFT_CARD_COLOR, 2);
+
 public:
     Usb(TFT_eSPI& tft, Application& app);
 

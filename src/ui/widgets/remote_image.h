@@ -12,7 +12,7 @@ private:
     int h;
 
     int lines_per_packet;
-    int loading_offset;
+    uint16_t loading_offset;
 
     std::function<void(uint16_t h, uint16_t request_bytes, uint16_t offset_bytes)>
         request_next_callback = nullptr;
@@ -33,12 +33,14 @@ public:
     void draw() override {};
 
     void update(TouchPointType& touch) override {
+        /*
         if (isDirty()) {
             reset();
             startLoading();
         }
 
         redraw();
+        */
         this->dirty = false;
     };
 
@@ -48,6 +50,8 @@ public:
         if (pr.readUInt8(status) && status != 0) {
             return;
         }
+
+        pr.readUInt16(loading_offset);
 
         uint16_t len = 0;
         uint16_t temp[w * lines_per_packet];

@@ -46,6 +46,10 @@ Usb::Usb(TFT_eSPI& tft, Application& app) : Screen(tft, app, "usb"), requesting_
     file_button_4.add_children(&file_card_4);
 
     top_container.add_children(&header);
+
+    nothing_to_c.setCentering(true, true);
+    nothing_to_c.disableSelfRedraw();
+    main_container.add_children(&nothing_to_c);
 }
 
 void Usb::update(TouchPointType& t) {
@@ -62,6 +66,10 @@ void Usb::update(TouchPointType& t) {
 
     page_next_button.update(t);
     page_prev_button.update(t);
+
+    if (total_entries == 0) {
+        nothing_to_c.draw();
+    }
 }
 
 void Usb::onUART(PacketReader& pr) {
@@ -70,11 +78,12 @@ void Usb::onUART(PacketReader& pr) {
     FileCard* arr[4] = {&file_card_1, &file_card_2, &file_card_3, &file_card_4};
     Button* buttons_arr[4] = {&file_button_1, &file_button_2, &file_button_3, &file_button_4};
 
-    for (auto card : arr) {
-        card->set_available(false);
-    }
-
     if (pr.readUInt8(id) && id == 71) {
+        for (int i = 0; i < 4; i++) {
+            arr[i]->set_available(false);
+            buttons_arr[i]->setEnabled(false);
+        }
+
         pr.readUInt16(current_parent_id);
 
         uint16_t count;
@@ -83,18 +92,24 @@ void Usb::onUART(PacketReader& pr) {
         for (int x = 0; x < count; x++) {
             uint16_t id;
             uint8_t ft;
+            uint32_t size;
             String name;
 
             pr.readUInt16(id);
             pr.readUInt8(ft);
+            pr.readUInt32(size);
             pr.readString(&name);
 
             if (x < sizeof(arr) / sizeof(FileCard*)) {
                 arr[x]->set_file(name, id, current_parent_id, ft);
                 arr[x]->set_available(true);
+                buttons_arr[x]->setEnabled(true);
 
                 if (ft == 0) {
-                    buttons_arr[x]->setPressedCallback([this]() {});
+                    buttons_arr[x]->setPressedCallback([this, id]() {
+                        this->app.model_preview.setFileId(id, requesting_folder_id);
+                        this->app.setScreen("model_preview");
+                    });
                 } else {
                     buttons_arr[x]->setPressedCallback([this, id]() { this->request(0, id); });
                 }
@@ -122,15 +137,22 @@ void Usb::invalidate() {
     page_next_button.invalidate();
     page_prev_button.invalidate();
 
-    page = 0;
-    requesting_folder_id = 0;
+    /*
+    file_card_1.set_available(false);
+    file_card_2.set_available(false);
+    file_card_3.set_available(false);
+    file_card_4.set_available(false);
+    */
 
-    current_parent_id = 0;
-    total_entries = 0;
+    // page = 0;
+    // requesting_folder_id = 0;
 
-    requesting = true;
-    first_request = true;
-    requesting_timer.reset();
+    // current_parent_id = 0;
+    // total_entries = 0;
+
+    // requesting = true;
+    // first_request = true;
+    // requesting_timer.reset();
 }
 
 void Usb::sendRequest() {
