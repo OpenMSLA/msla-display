@@ -16,6 +16,8 @@ Main::Main(TFT_eSPI& tft, Application& app)
 
     scene.loadImage("/scene.rgb565");
     usb_image.loadImage("/usb_off.rgb565");
+    settings_image.loadImage("/settings.rgb565");
+    abort_image.loadImage("/cancel.rgb565");
 
     preview.setRequestCallback([](uint16_t h, uint16_t request_bytes, uint16_t offset_bytes) {
         PacketWriter pw;
@@ -45,12 +47,13 @@ Main::Main(TFT_eSPI& tft, Application& app)
     printing_status_container.add_children(&elapsed);
 
     buttons_cont.add_children(&usb_btn);
-    buttons_cont.add_children(&btn2);
-    buttons_cont.add_children(&home);
+    buttons_cont.add_children(&home_btn);
+    buttons_cont.add_children(&settings_btn);
+    buttons_cont.add_children(&abort_btn);
 
-    home.setPressedCallback([this]() { UARTSend(56); });
-    home.add_children(&home_image);
-    home.add_children(&home_label);
+    home_btn.setPressedCallback([this]() { UARTSend(56); });
+    home_btn.add_children(&home_image);
+    home_btn.add_children(&home_label);
 
     home_label.setCentering(false, true);
 
@@ -66,8 +69,17 @@ Main::Main(TFT_eSPI& tft, Application& app)
     usb_btn.add_children(&usb_label);
     usb_btn.setPressedCallback([this]() { this->app.setScreen("usb"); });
     usb_btn.setEnabled(false);
-
     usb_label.setCentering(false, true);
+
+    settings_btn.add_children(&settings_image);
+    settings_btn.add_children(&settings_label);
+    settings_label.setCentering(false, true);
+
+    abort_btn.add_children(&abort_image);
+    abort_btn.add_children(&abort_label);
+    abort_btn.setPressedCallback([this]() { UARTSend(40); });
+
+    abort_label.setCentering(false, true);
 }
 
 void Main::update(TouchPointType& t) {
@@ -100,11 +112,13 @@ void Main::update(TouchPointType& t) {
     image_cont.update(t);
     top_right_cont.update(t);
     bottom_card.update(t);
-    buttons_cont.update(t);
+    // buttons_cont.update(t);
+    settings_btn.update(t);
     left_bottom_card.update(t);
 
     switch (get_printer_state_type(state_t)) {
         case 0:
+            abort_btn.update(t);
             printing_status_container.update(t);
             break;
         case 1:
@@ -112,6 +126,8 @@ void Main::update(TouchPointType& t) {
             break;
 
         default:
+            usb_btn.update(t);
+            home_btn.update(t);
             scene.update(t);
             break;
     }
@@ -249,11 +265,14 @@ void Main::updateState(PacketReader& pr) {
     if (last_state_type == 0 && !is_print_state(state_t)) {
         preview.reset();
         image_cont.invalidate();
+        home_btn.invalidate();
+        usb_btn.invalidate();
     }
 
     if (last_state_type != 0 && is_print_state(state_t)) {
         preview.startLoading();
         printing_status_container.invalidate();
+        abort_btn.invalidate();
     }
 
     uint8_t current_state_type = get_printer_state_type(state_t);
@@ -290,8 +309,12 @@ void Main::invalidate() {
     image_cont.invalidate();
     top_right_cont.invalidate();
     bottom_card.invalidate();
-    buttons_cont.invalidate();
+    // buttons_cont.invalidate();
     left_bottom_card.invalidate();
+
+    settings_btn.invalidate();
+    home_btn.invalidate();
+    usb_btn.invalidate();
 
     printing_status_container.invalidate();
     error.invalidate();
@@ -299,4 +322,6 @@ void Main::invalidate() {
 
     preview.reset();
     preview.startLoading();
+
+    first_draw = true;
 }

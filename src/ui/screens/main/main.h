@@ -119,16 +119,30 @@ private:
     Button usb_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, TFT_ACT_COLOR,
                             TFT_WHITE, TFT_BG_COLOR, 2);
 
-    Button btn2 = Button(tft, "2", 0, buttons_size + CARD_MARGIN, buttons_size * 2.6, buttons_size,
-                         5, TFT_GREEN, TFT_WHITE, TFT_BG_COLOR, 2);
-
     Label home_label = Label(tft, "Home", (buttons_size - 24) / 2 + 35, buttons_size / 2, TFT_WHITE,
                              TFT_ACT_COLOR, 2);
 
     Image home_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
 
-    Button home = Button(tft, "", 0, buttons_size * 2 + CARD_MARGIN * 2, buttons_size * 2.6,
-                         buttons_size, 5, TFT_ACT_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
+    Button home_btn = Button(tft, "", 0, buttons_size + CARD_MARGIN, buttons_size * 2.6,
+                             buttons_size, 5, TFT_ACT_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
+
+    Label settings_label = Label(tft, "Cfg", (buttons_size - 24) / 2 + 40, buttons_size / 2,
+                                 TFT_WHITE, TFT_CARD_COLOR, 2);
+
+    Image settings_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+
+    Button settings_btn =
+        Button(tft, "2", 0, buttons_size * 2 + CARD_MARGIN * 2, buttons_size * 2.6, buttons_size, 5,
+               TFT_CARD_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
+
+    Label abort_label =
+        Label(tft, "Abort", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_WHITE, TFT_RED, 2);
+
+    Image abort_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+
+    Button abort_btn = Button(tft, "", 0, buttons_size + CARD_MARGIN, buttons_size * 2.6,
+                              buttons_size, 5, TFT_RED, TFT_WHITE, TFT_BG_COLOR, 2);
 
     // Button btn = Button(tft, "Btn", 10, 10, 50, 50, TFT_RED, TFT_WHITE, 2);
 
