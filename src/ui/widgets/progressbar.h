@@ -70,7 +70,8 @@ public:
         progress_width = new_w * (progress / 100.0);
         if (last_progress_width != progress_width || last_text != text) {
             invalidate();
-            dirty_area = DirtyArea{getX(), getY() - 2, w, h + 4};
+            dirty_area = DirtyArea{getX(), getY() - static_cast<uint16_t>(2), w,
+                                   h + static_cast<uint16_t>(4)};
         }
 
         last_text = text;

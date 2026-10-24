@@ -65,4 +65,13 @@ public:
         center_x = x;
         center_y = y;
     }
+
+    void setBgColor(uint16_t c) {
+        if (bg_color == c) {
+            return;
+        }
+
+        bg_color = c;
+        invalidate();
+    }
 };

@@ -200,10 +200,15 @@ void Main::updateState(PacketReader& pr) {
     pr.readUInt8(flags_array);
     usb_btn.setEnabled(flags_array & (1 << 0));
 
-    if (usb_btn.isEnabled())
+    if (usb_btn.isEnabled()) {
         usb_image.loadImage("/usb.rgb565");
-    else
+        usb_btn.setFgColor(TFT_ACT_COLOR);
+        usb_label.setBgColor(TFT_ACT_COLOR);
+    } else {
         usb_image.loadImage("/usb_off.rgb565");
+        usb_btn.setFgColor(0x032C);
+        usb_label.setBgColor(0x032C);
+    }
 
     pr.readUInt8(state_t);
 
