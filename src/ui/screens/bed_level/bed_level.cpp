@@ -6,6 +6,7 @@ BedLevel::BedLevel(TFT_eSPI& tft, Application& app)
     : Screen(tft, app, "bed_level"), pos_timer(1500) {
     home_image.loadImage("/home.rgb565");
 
+    back_image.loadImage("/back.rgb565");
     general_label.setCentering(true, false);
 
     cont.add_children(&general_label);
@@ -14,6 +15,8 @@ BedLevel::BedLevel(TFT_eSPI& tft, Application& app)
     cont.add_children(&second_label);
     cont.add_children(&third_label);
     cont.add_children(&home_btn);
+
+    cont.add_children(&back_button);
 
     cont.add_children(&up_hundred);
     cont.add_children(&up_ten);
@@ -37,13 +40,7 @@ BedLevel::BedLevel(TFT_eSPI& tft, Application& app)
     down_ten.setPressedCallback([this]() { this->send(bed_pos - 0.1); });
     down_one.setPressedCallback([this]() { this->send(bed_pos - 1); });
 
-    save_btn.setPressedCallback([this]() {
-        if (this->manual) {
-            this->save(bed_pos);
-        } else {
-            this->app.setScreen("main");
-        }
-    });
+    save_btn.setPressedCallback([this]() { this->save(bed_pos); });
 
     pos_label.setCentering(false, true);
 
@@ -60,6 +57,9 @@ BedLevel::BedLevel(TFT_eSPI& tft, Application& app)
     home_btn.add_children(&home_label);
 
     home_label.setCentering(false, true);
+
+    back_button.add_children(&back_image);
+    back_button.setPressedCallback([this]() { this->app.setScreen("main"); });
 }
 
 void BedLevel::update(TouchPointType& t) {
@@ -113,6 +113,11 @@ void BedLevel::onUART(PacketReader& pr) {
 
 void BedLevel::invalidate() {
     tft.fillScreen(TFT_BG_COLOR);
+
+    homed = false;
+    manual = false;
+
+    bed_pos = 0.f;
 
     cont.invalidate();
 }

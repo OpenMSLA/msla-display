@@ -34,7 +34,7 @@ public:
         screens.push_back(&model_preview);
         screens.push_back(&bed_level);
 
-        setScreen("main");
+        setScreen("initial");
     }
 
     void update(FT6336U& touch) {

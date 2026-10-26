@@ -330,5 +330,7 @@ void Main::invalidate() {
     preview.reset();
     preview.startLoading();
 
+    abort_btn.invalidate();
+
     first_draw = true;
 }

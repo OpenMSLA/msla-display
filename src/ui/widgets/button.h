@@ -87,6 +87,9 @@ public:
 
     /// @brief Set button text
     void setText(String str) {
+        if (text == str)
+            return;
+
         text = str;
         invalidate();
     };
