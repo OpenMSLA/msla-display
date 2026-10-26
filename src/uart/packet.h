@@ -12,7 +12,6 @@ bool startsWithSync();
 /// @brief Pointed packet reader
 class PacketReader {
 private:
-    size_t pos = 0;
     size_t size = 0;
 
     uint32_t packetStartTime = 0;
@@ -23,6 +22,7 @@ private:
     }
 
 public:
+    size_t pos = 0;
     std::vector<uint8_t> data;
 
     PacketReader() = default;

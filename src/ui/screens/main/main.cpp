@@ -75,6 +75,8 @@ Main::Main(TFT_eSPI& tft, Application& app)
     settings_btn.add_children(&settings_label);
     settings_label.setCentering(false, true);
 
+    settings_btn.setPressedCallback([this]() { this->app.setScreen("bed_level"); });
+
     abort_btn.add_children(&abort_image);
     abort_btn.add_children(&abort_label);
     abort_btn.setPressedCallback([this]() { UARTSend(40); });

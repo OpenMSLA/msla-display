@@ -1,5 +1,6 @@
 #pragma once
 
+#include "screens/bed_level/bed_level.h"
 #include "screens/initial/initial.h"
 #include "screens/main/main.h"
 #include "screens/screen.h"
@@ -16,9 +17,11 @@ public:
     Usb usb_screen;
     ModelPreview model_preview;
 
+    BedLevel bed_level;
+
     Application(TFT_eSPI& tft)
         : tft(tft), main_screen(tft, *this), initial_screen(tft, *this), usb_screen(tft, *this),
-          model_preview(tft, *this), standby_timer(STANDBY_TIMEOUT * 10000) {
+          model_preview(tft, *this), bed_level(tft, *this), standby_timer(STANDBY_TIMEOUT * 10000) {
         tft.setRotation(1);
         tft.fillScreen(TFT_BLACK);
 
@@ -29,8 +32,9 @@ public:
         screens.push_back(&initial_screen);
         screens.push_back(&usb_screen);
         screens.push_back(&model_preview);
+        screens.push_back(&bed_level);
 
-        setScreen("initial");
+        setScreen("main");
     }
 
     void update(FT6336U& touch) {
