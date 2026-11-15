@@ -50,16 +50,18 @@ uint8_t crc8(uint8_t* data, size_t len) {
 }
 
 void UARTSend(uint8_t* data, size_t len) {
-    xSemaphoreTake(uartMutex, portMAX_DELAY);
+    if (OrchestratorSerial && OrchestratorSerial.availableForWrite()) {
+        xSemaphoreTake(uartMutex, portMAX_DELAY);
 
-    OrchestratorSerial.write(SYNC_BYTES, SYNC_LEN);
-    OrchestratorSerial.write((uint8_t*)&len, sizeof(uint16_t));
-    OrchestratorSerial.write(data, len);
+        OrchestratorSerial.write(SYNC_BYTES, SYNC_LEN);
+        OrchestratorSerial.write((uint8_t*)&len, sizeof(uint16_t));
+        OrchestratorSerial.write(data, len);
 
-    uint8_t crc = crc8(data, len);
-    OrchestratorSerial.write(crc);
+        uint8_t crc = crc8(data, len);
+        OrchestratorSerial.write(crc);
 
-    xSemaphoreGive(uartMutex);
+        xSemaphoreGive(uartMutex);
+    }
 }
 
 void UARTSend(uint8_t byte) {
