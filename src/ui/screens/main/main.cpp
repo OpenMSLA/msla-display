@@ -19,6 +19,9 @@ Main::Main(TFT_eSPI& tft, Application& app)
     settings_image.loadImage("/settings.rgb565");
     abort_image.loadImage("/cancel.rgb565");
 
+    pause_image.loadImage("/usb_off.rgb565");
+    resume_image.loadImage("/usb_off.rgb565");
+
     preview.setRequestCallback([](uint16_t h, uint16_t request_bytes, uint16_t offset_bytes) {
         PacketWriter pw;
         pw.write((uint8_t)20);
@@ -47,6 +50,8 @@ Main::Main(TFT_eSPI& tft, Application& app)
     printing_status_container.add_children(&elapsed);
 
     buttons_cont.add_children(&usb_btn);
+    buttons_cont.add_children(&pause_btn);
+    buttons_cont.add_children(&resume_btn);
     buttons_cont.add_children(&home_btn);
     buttons_cont.add_children(&settings_btn);
     buttons_cont.add_children(&abort_btn);
@@ -64,6 +69,16 @@ Main::Main(TFT_eSPI& tft, Application& app)
     left_bottom_card.add_children(&core_ver);
 
     bottom_card.add_children(&ip_label);
+
+    pause_btn.add_children(&pause_image);
+    pause_btn.add_children(&pause_label);
+    pause_btn.setPressedCallback([this]() { UARTSend(42); });
+    pause_label.setCentering(false, true);
+
+    resume_btn.add_children(&resume_image);
+    resume_btn.add_children(&resume_label);
+    resume_btn.setPressedCallback([this]() { UARTSend(44); });
+    resume_label.setCentering(false, true);
 
     usb_btn.add_children(&usb_image);
     usb_btn.add_children(&usb_label);
@@ -120,6 +135,12 @@ void Main::update(TouchPointType& t) {
 
     switch (get_printer_state_type(state_t)) {
         case 0:
+            if (state_t == 2) {
+                resume_btn.update(t);
+            } else {
+                pause_btn.update(t);
+            }
+
             abort_btn.update(t);
             printing_status_container.update(t);
             break;
@@ -220,6 +241,8 @@ void Main::updateState(PacketReader& pr) {
             break;
 
         case 1:
+        case 2:
+        case 7:
             pr.readUInt16(current_layer);
             pr.readUInt16(total_layers);
 
@@ -231,16 +254,23 @@ void Main::updateState(PacketReader& pr) {
             pr.readUInt32(estimated_finish_time);
             pr.readUInt32(total_elapsed);
 
-            printer_status.setText("Printing...");
+            switch (state_t) {
+                case 1:
+                    printer_status.setText("Printing...");
+                    break;
+
+                case 2:
+                    printer_status.setText("Print paused");
+                    break;
+
+                case 7:
+                    printer_status.setText("Print pausing...");
+                    break;
+            }
+
             layers.setText("Layer " + String(current_layer) + "/" + String(total_layers));
 
             global_progress.setProgress((current_ir / (float)total_ir) * 100.f);
-
-            break;
-
-        case 2:
-            printer_status.setText("Print paused");
-
             break;
 
         case 3: {
@@ -280,6 +310,7 @@ void Main::updateState(PacketReader& pr) {
         preview.startLoading();
         printing_status_container.invalidate();
         abort_btn.invalidate();
+        pause_btn.invalidate();
     }
 
     uint8_t current_state_type = get_printer_state_type(state_t);
@@ -322,6 +353,9 @@ void Main::invalidate() {
     settings_btn.invalidate();
     home_btn.invalidate();
     usb_btn.invalidate();
+
+    pause_btn.invalidate();
+    resume_btn.invalidate();
 
     printing_status_container.invalidate();
     error.invalidate();

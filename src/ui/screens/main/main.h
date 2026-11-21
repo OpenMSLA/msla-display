@@ -16,7 +16,7 @@
 #define ETA_UPDATE_SECONDS 3
 
 inline bool is_print_state(uint8_t s) {
-    return s == 1 || s == 2;
+    return s == 1 || s == 2 || s == 7;
 }
 
 /// Returns printer states
@@ -119,6 +119,8 @@ private:
     Button usb_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, TFT_ACT_COLOR,
                             TFT_WHITE, TFT_BG_COLOR, 2);
 
+    /// --------------------------------------------
+
     Label home_label = Label(tft, "Home", (buttons_size - 24) / 2 + 35, buttons_size / 2, TFT_WHITE,
                              TFT_ACT_COLOR, 2);
 
@@ -126,6 +128,8 @@ private:
 
     Button home_btn = Button(tft, "", 0, buttons_size + CARD_MARGIN, buttons_size * 2.6,
                              buttons_size, 5, TFT_ACT_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
+
+    /// --------------------------------------------
 
     Label settings_label = Label(tft, "Cfg", (buttons_size - 24) / 2 + 40, buttons_size / 2,
                                  TFT_WHITE, TFT_CARD_COLOR, 2);
@@ -135,6 +139,7 @@ private:
     Button settings_btn =
         Button(tft, "2", 0, buttons_size * 2 + CARD_MARGIN * 2, buttons_size * 2.6, buttons_size, 5,
                TFT_CARD_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
+    /// --------------------------------------------
 
     Label abort_label =
         Label(tft, "Abort", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_WHITE, TFT_RED, 2);
@@ -144,7 +149,25 @@ private:
     Button abort_btn = Button(tft, "", 0, buttons_size + CARD_MARGIN, buttons_size * 2.6,
                               buttons_size, 5, TFT_RED, TFT_WHITE, TFT_BG_COLOR, 2);
 
-    // Button btn = Button(tft, "Btn", 10, 10, 50, 50, TFT_RED, TFT_WHITE, 2);
+    /// --------------------------------------------
+
+    Label pause_label = Label(tft, "Pause", (buttons_size - 24) / 2 + 30, buttons_size / 2,
+                              TFT_BLACK, TFT_YELLOW, 2);
+
+    Image pause_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+
+    Button pause_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, TFT_YELLOW,
+                              TFT_WHITE, TFT_BG_COLOR, 2);
+
+    /// --------------------------------------------
+
+    Label resume_label = Label(tft, "Resume", (buttons_size - 24) / 2 + 30, buttons_size / 2,
+                               TFT_WHITE, TFT_ACT_COLOR, 2);
+
+    Image resume_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+
+    Button resume_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, TFT_ACT_COLOR,
+                               TFT_WHITE, TFT_BG_COLOR, 2);
 
     /// --------------------------------------------
 

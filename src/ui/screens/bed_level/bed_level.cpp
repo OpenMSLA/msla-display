@@ -90,6 +90,7 @@ void BedLevel::onUART(PacketReader& pr) {
                     this->updatePosLabel();
                 }
             }
+            break;
         }
 
         case 63: {
@@ -104,6 +105,7 @@ void BedLevel::onUART(PacketReader& pr) {
                 pr.readString(&e);
                 error.setText(e);
             }
+            break;
         }
 
         default:
