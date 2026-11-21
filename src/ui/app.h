@@ -21,7 +21,7 @@ public:
 
     Application(TFT_eSPI& tft)
         : tft(tft), main_screen(tft, *this), initial_screen(tft, *this), usb_screen(tft, *this),
-          model_preview(tft, *this), bed_level(tft, *this), standby_timer(STANDBY_TIMEOUT * 10000) {
+          model_preview(tft, *this), bed_level(tft, *this), standby_timer(STANDBY_TIMEOUT) {
         tft.setRotation(1);
         tft.fillScreen(TFT_BLACK);
 

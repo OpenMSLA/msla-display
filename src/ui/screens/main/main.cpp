@@ -19,8 +19,8 @@ Main::Main(TFT_eSPI& tft, Application& app)
     settings_image.loadImage("/settings.rgb565");
     abort_image.loadImage("/cancel.rgb565");
 
-    pause_image.loadImage("/usb_off.rgb565");
-    resume_image.loadImage("/usb_off.rgb565");
+    pause_image.loadImage("/pause.rgb565");
+    resume_image.loadImage("/resume.rgb565");
 
     preview.setRequestCallback([](uint16_t h, uint16_t request_bytes, uint16_t offset_bytes) {
         PacketWriter pw;
@@ -233,6 +233,7 @@ void Main::updateState(PacketReader& pr) {
         usb_label.setBgColor(0x032C);
     }
 
+    uint8_t last_state = state_t;
     pr.readUInt8(state_t);
 
     switch (state_t) {
@@ -310,6 +311,14 @@ void Main::updateState(PacketReader& pr) {
         preview.startLoading();
         printing_status_container.invalidate();
         abort_btn.invalidate();
+        pause_btn.invalidate();
+    }
+
+    if (last_state == 1 && (state_t == 2 || state_t == 7)) {
+        resume_btn.invalidate();
+    }
+
+    if ((last_state == 2 || last_state == 7) && state_t == 1) {
         pause_btn.invalidate();
     }
 

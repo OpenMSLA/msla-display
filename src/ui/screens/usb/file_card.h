@@ -18,7 +18,7 @@ private:
 
     bool available = false;
 
-    Image icon = Image(tft, 13, 13, 24, 24);
+    Image icon = Image(tft, 13, 13); // 24 24
 
 public:
     int w;

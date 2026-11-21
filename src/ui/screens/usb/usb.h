@@ -36,22 +36,22 @@ private:
         Container(tft, CARD_MARGIN, CARD_MARGIN * 2 + 50, main_card_width,
                   TFT_WIDTH - (CARD_MARGIN * 3 + 50), 5, TFT_CARD_COLOR, TFT_BG_COLOR);
 
-    Image back_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2, 24, 24);
+    Image back_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2); // 24 24
 
     Button back_button = Button(tft, "", CARD_MARGIN, CARD_MARGIN, 50, 50, 5, TFT_CARD_COLOR,
                                 TFT_TRANSPARENT, TFT_BG_COLOR, 1);
 
-    Image home_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2, 24, 24);
+    Image home_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2); // 24 24
 
     Button home_button = Button(tft, "", CARD_MARGIN * 2 + 50, CARD_MARGIN, 50, 50, 5,
                                 TFT_CARD_COLOR, TFT_TRANSPARENT, TFT_BG_COLOR, 1);
 
-    Image page_next_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2, 24, 24);
+    Image page_next_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2); // 24 24
 
     Button page_next_button = Button(tft, "", TFT_HEIGHT - CARD_MARGIN - 50, CARD_MARGIN, 50, 50, 5,
                                      TFT_CARD_COLOR, TFT_TRANSPARENT, TFT_BG_COLOR, 1);
 
-    Image page_prev_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2, 24, 24);
+    Image page_prev_image = Image(tft, (50 - 24) / 2, (50 - 24) / 2); // 24 24
 
     Button page_prev_button = Button(tft, "", TFT_HEIGHT - (CARD_MARGIN * 2 + 50 * 2), CARD_MARGIN,
                                      50, 50, 5, TFT_CARD_COLOR, TFT_TRANSPARENT, TFT_BG_COLOR, 1);

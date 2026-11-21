@@ -24,7 +24,7 @@ private:
     Container cont =
         Container(tft, 5, 5, TFT_HEIGHT - 10, TFT_WIDTH - 10, 5, TFT_CARD_COLOR, TFT_BG_COLOR);
 
-    Image back_image = Image(tft, (40 - 24) / 2, (40 - 24) / 2, 24, 24);
+    Image back_image = Image(tft, (40 - 24) / 2, (40 - 24) / 2); // 24 24
 
     Button back_button =
         Button(tft, "", 4, 3, 40, 40, 5, TFT_CARD_COLOR, TFT_CARD_COLOR, TFT_CARD_COLOR, 1);
@@ -42,7 +42,7 @@ private:
     Label home_label = Label(tft, "Home", (BUTTONS_SIZE - 24) / 2 + 35, BUTTONS_SIZE / 2, TFT_WHITE,
                              TFT_ACT_COLOR, 2);
 
-    Image home_image = Image(tft, (BUTTONS_SIZE - 24) / 2, (BUTTONS_SIZE - 24) / 2, 24, 24);
+    Image home_image = Image(tft, (BUTTONS_SIZE - 24) / 2, (BUTTONS_SIZE - 24) / 2); // 24 24
 
     Button home_btn = Button(tft, "", 45, 45 + CARD_PADDING, BUTTONS_SIZE * 2.6, BUTTONS_SIZE, 5,
                              TFT_ACT_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);

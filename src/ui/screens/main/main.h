@@ -74,7 +74,7 @@ private:
 
     RemoteImage preview = RemoteImage(tft, 0, 0, TFT_WIDTH / 2, TFT_WIDTH / 2, 2);
 
-    Image logo = Image(tft, ((TFT_WIDTH / 2) - 120) / 2, ((TFT_WIDTH / 2) - 120) / 2, 120, 120);
+    Image logo = Image(tft, ((TFT_WIDTH / 2) - 120) / 2, ((TFT_WIDTH / 2) - 120) / 2); // 120 120
 
     /// -----------------------------------------
 
@@ -83,12 +83,12 @@ private:
                   TFT_WIDTH / 2 - (CARD_GAP + CARD_MARGIN), 5, TFT_CARD_COLOR, TFT_BG_COLOR);
 
     /// layers
-    Image z_pos_image = Image(tft, CARD_PADDING, CARD_PADDING, 24, 24);
+    Image z_pos_image = Image(tft, CARD_PADDING, CARD_PADDING); // 24 24
 
     Label z_pos =
         Label(tft, "Z:170.00mm", CARD_PADDING + 30, CARD_PADDING + 5, TFT_WHITE, TFT_CARD_COLOR, 2);
 
-    Image uv_image = Image(tft, CARD_PADDING, CARD_PADDING + 30, 24, 24);
+    Image uv_image = Image(tft, CARD_PADDING, CARD_PADDING + 30); // 24 24
 
     Label uv_state =
         Label(tft, "OFF", CARD_PADDING + 30, CARD_PADDING + 35, TFT_WHITE, TFT_CARD_COLOR, 2);
@@ -114,7 +114,7 @@ private:
     Label usb_label = Label(tft, "Print", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_WHITE,
                             TFT_ACT_COLOR, 2);
 
-    Image usb_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+    Image usb_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
     Button usb_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, TFT_ACT_COLOR,
                             TFT_WHITE, TFT_BG_COLOR, 2);
@@ -124,7 +124,7 @@ private:
     Label home_label = Label(tft, "Home", (buttons_size - 24) / 2 + 35, buttons_size / 2, TFT_WHITE,
                              TFT_ACT_COLOR, 2);
 
-    Image home_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+    Image home_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
     Button home_btn = Button(tft, "", 0, buttons_size + CARD_MARGIN, buttons_size * 2.6,
                              buttons_size, 5, TFT_ACT_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
@@ -134,7 +134,7 @@ private:
     Label settings_label = Label(tft, "Cfg", (buttons_size - 24) / 2 + 40, buttons_size / 2,
                                  TFT_WHITE, TFT_CARD_COLOR, 2);
 
-    Image settings_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+    Image settings_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
     Button settings_btn =
         Button(tft, "2", 0, buttons_size * 2 + CARD_MARGIN * 2, buttons_size * 2.6, buttons_size, 5,
@@ -144,27 +144,26 @@ private:
     Label abort_label =
         Label(tft, "Abort", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_WHITE, TFT_RED, 2);
 
-    Image abort_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+    Image abort_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
     Button abort_btn = Button(tft, "", 0, buttons_size + CARD_MARGIN, buttons_size * 2.6,
                               buttons_size, 5, TFT_RED, TFT_WHITE, TFT_BG_COLOR, 2);
 
     /// --------------------------------------------
 
-    Label pause_label = Label(tft, "Pause", (buttons_size - 24) / 2 + 30, buttons_size / 2,
-                              TFT_BLACK, TFT_YELLOW, 2);
+    Label pause_label =
+        Label(tft, "Pause", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_BLACK, 0xFD88, 2);
 
-    Image pause_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+    Image pause_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
-    Button pause_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, TFT_YELLOW,
-                              TFT_WHITE, TFT_BG_COLOR, 2);
+    Button pause_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, 0xFD88, TFT_WHITE,
+                              TFT_BG_COLOR, 2);
 
     /// --------------------------------------------
-
-    Label resume_label = Label(tft, "Resume", (buttons_size - 24) / 2 + 30, buttons_size / 2,
+    Label resume_label = Label(tft, "Cont.", (buttons_size - 24) / 2 + 30, buttons_size / 2,
                                TFT_WHITE, TFT_ACT_COLOR, 2);
 
-    Image resume_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2, 24, 24);
+    Image resume_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
     Button resume_btn = Button(tft, "", 0, 0, buttons_size * 2.6, buttons_size, 5, TFT_ACT_COLOR,
                                TFT_WHITE, TFT_BG_COLOR, 2);
@@ -172,7 +171,7 @@ private:
     /// --------------------------------------------
 
     // Special thanks to @I_KODI_I https://t.me/I_KODI_I for this pixel art
-    Image scene = Image(tft, TFT_WIDTH / 2 + CARD_GAP, TFT_WIDTH / 2 - 118, 305, 118);
+    Image scene = Image(tft, TFT_WIDTH / 2 + CARD_GAP, TFT_WIDTH / 2 - 118); // 305, 118
 
     Container top_right_cont = Container(tft, TFT_WIDTH / 2 + CARD_GAP, CARD_MARGIN,
                                          TFT_HEIGHT - (TFT_WIDTH / 2 + (CARD_GAP + CARD_MARGIN)),
@@ -196,19 +195,19 @@ private:
                     TFT_WHITE, TFT_ACT_COLOR, TFT_EL_COLOR, TFT_CARD_COLOR, 2);
 
     /// layers
-    Image stack_image = Image(tft, CARD_PADDING - 3, CARD_GAP + 25, 24, 24);
+    Image stack_image = Image(tft, CARD_PADDING - 3, CARD_GAP + 25); // 24 24
 
     Label layers =
         Label(tft, "Layer -/-", CARD_PADDING + 27, CARD_GAP + 30, TFT_WHITE, TFT_CARD_COLOR, 2);
 
     /// remaining
-    Image remaining_image = Image(tft, CARD_PADDING - 3, CARD_GAP + 55, 24, 24);
+    Image remaining_image = Image(tft, CARD_PADDING - 3, CARD_GAP + 55); // 24 24
 
     Label remaining =
         Label(tft, "ETA: 0s", CARD_PADDING + 27, CARD_GAP + 60, TFT_WHITE, TFT_CARD_COLOR, 2);
 
     /// elapsed
-    Image elapsed_image = Image(tft, CARD_PADDING - 3, CARD_GAP + 85, 24, 24);
+    Image elapsed_image = Image(tft, CARD_PADDING - 3, CARD_GAP + 85); // 24 24
 
     Label elapsed =
         Label(tft, "Elapsed: 0s", CARD_PADDING + 27, CARD_GAP + 90, TFT_WHITE, TFT_CARD_COLOR, 2);

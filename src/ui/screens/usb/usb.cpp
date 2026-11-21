@@ -8,7 +8,7 @@ Usb::Usb(TFT_eSPI& tft, Application& app) : Screen(tft, app, "usb"), requesting_
 
     back_button.setPressedCallback([this]() { this->request(0, this->current_parent_id); });
 
-    home_image.loadImage("/home-d.rgb565");
+    home_image.loadImage("/home.rgb565");
     home_button.add_children(&home_image);
 
     home_button.setPressedCallback([this]() { this->app.setScreen("main"); });

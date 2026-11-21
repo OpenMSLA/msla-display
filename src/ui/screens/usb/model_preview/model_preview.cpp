@@ -7,7 +7,7 @@ ModelPreview::ModelPreview(TFT_eSPI& tft, Application& app)
     logo.loadImage("/logo.rgb565");
     stack_image.loadImage("/stack.rgb565");
     total_time_image.loadImage("/clock.rgb565");
-    size_image.loadImage("/file_card_color.rgb565");
+    size_image.loadImage("/file.rgb565");
 
     back_image.loadImage("/back.rgb565");
     back_button.add_children(&back_image);

@@ -1,5 +1,4 @@
 #pragma once
-#include "config.h"
 
 #include <Arduino.h>
 #include <FT6336U.h>
