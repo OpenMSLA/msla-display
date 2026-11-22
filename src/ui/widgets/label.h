@@ -23,16 +23,21 @@ public:
           Widget(tft, x, y) {}
 
     void draw() override {
-        tft.setTextColor(this->text_color, this->bg_color);
         tft.setTextSize(this->font_size);
-
         uint16_t w = tft.textWidth(text);
         uint16_t h = tft.fontHeight();
 
         uint16_t x = center_x ? getX() - w / 2 : getX();
         uint16_t y = center_y ? getY() - h / 2 : getY();
 
-        tft.fillRect(dirty_area.x, dirty_area.y, dirty_area.w, dirty_area.h, this->bg_color);
+        uint16_t bg = bg_color;
+
+        if (bg_color == TFT_TRANSPARENT) {
+            bg = tft.readPixel(x + w / 2, y + h / 2);
+        }
+
+        tft.setTextColor(this->text_color, bg);
+        tft.fillRect(dirty_area.x, dirty_area.y, dirty_area.w, dirty_area.h, bg);
         tft.drawString(this->text, x, y);
     };
 

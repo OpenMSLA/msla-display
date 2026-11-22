@@ -40,7 +40,7 @@ private:
                               TFT_WHITE, TFT_CARD_COLOR, 2);
 
     Label home_label = Label(tft, "Home", (BUTTONS_SIZE - 24) / 2 + 35, BUTTONS_SIZE / 2, TFT_WHITE,
-                             TFT_ACT_COLOR, 2);
+                             TFT_TRANSPARENT, 2);
 
     Image home_image = Image(tft, (BUTTONS_SIZE - 24) / 2, (BUTTONS_SIZE - 24) / 2); // 24 24
 

@@ -226,11 +226,9 @@ void Main::updateState(PacketReader& pr) {
     if (usb_btn.isEnabled()) {
         usb_image.loadImage("/usb.rgb565");
         usb_btn.setFgColor(TFT_ACT_COLOR);
-        usb_label.setBgColor(TFT_ACT_COLOR);
     } else {
         usb_image.loadImage("/usb_off.rgb565");
         usb_btn.setFgColor(0x032C);
-        usb_label.setBgColor(0x032C);
     }
 
     uint8_t last_state = state_t;

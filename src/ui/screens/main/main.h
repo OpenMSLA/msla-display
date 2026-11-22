@@ -112,7 +112,7 @@ private:
                   TFT_BG_COLOR);
 
     Label usb_label = Label(tft, "Print", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_WHITE,
-                            TFT_ACT_COLOR, 2);
+                            TFT_TRANSPARENT, 2);
 
     Image usb_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
@@ -122,7 +122,7 @@ private:
     /// --------------------------------------------
 
     Label home_label = Label(tft, "Home", (buttons_size - 24) / 2 + 35, buttons_size / 2, TFT_WHITE,
-                             TFT_ACT_COLOR, 2);
+                             TFT_TRANSPARENT, 2);
 
     Image home_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
@@ -132,7 +132,7 @@ private:
     /// --------------------------------------------
 
     Label settings_label = Label(tft, "Cfg", (buttons_size - 24) / 2 + 40, buttons_size / 2,
-                                 TFT_WHITE, TFT_CARD_COLOR, 2);
+                                 TFT_WHITE, TFT_TRANSPARENT, 2);
 
     Image settings_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
@@ -141,8 +141,8 @@ private:
                TFT_CARD_COLOR, TFT_WHITE, TFT_BG_COLOR, 2);
     /// --------------------------------------------
 
-    Label abort_label =
-        Label(tft, "Abort", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_WHITE, TFT_RED, 2);
+    Label abort_label = Label(tft, "Abort", (buttons_size - 24) / 2 + 30, buttons_size / 2,
+                              TFT_WHITE, TFT_TRANSPARENT, 2);
 
     Image abort_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
@@ -151,8 +151,8 @@ private:
 
     /// --------------------------------------------
 
-    Label pause_label =
-        Label(tft, "Pause", (buttons_size - 24) / 2 + 30, buttons_size / 2, TFT_BLACK, 0xFD88, 2);
+    Label pause_label = Label(tft, "Pause", (buttons_size - 24) / 2 + 30, buttons_size / 2,
+                              TFT_BLACK, TFT_TRANSPARENT, 2);
 
     Image pause_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
@@ -161,7 +161,7 @@ private:
 
     /// --------------------------------------------
     Label resume_label = Label(tft, "Cont.", (buttons_size - 24) / 2 + 30, buttons_size / 2,
-                               TFT_WHITE, TFT_ACT_COLOR, 2);
+                               TFT_WHITE, TFT_TRANSPARENT, 2);
 
     Image resume_image = Image(tft, (buttons_size - 24) / 2, (buttons_size - 24) / 2); // 24 24
 
