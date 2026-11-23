@@ -242,6 +242,7 @@ void Main::updateState(PacketReader& pr) {
         case 1:
         case 2:
         case 7:
+        case 8:
             pr.readUInt16(current_layer);
             pr.readUInt16(total_layers);
 
@@ -264,6 +265,10 @@ void Main::updateState(PacketReader& pr) {
 
                 case 7:
                     printer_status.setText("Print pausing...");
+                    break;
+
+                case 8:
+                    printer_status.setText("Print resuming...");
                     break;
             }
 
@@ -312,11 +317,11 @@ void Main::updateState(PacketReader& pr) {
         pause_btn.invalidate();
     }
 
-    if (last_state == 1 && (state_t == 2 || state_t == 7)) {
+    if (last_state == 1 && (state_t == 7 || state_t == 2)) {
         resume_btn.invalidate();
     }
 
-    if ((last_state == 2 || last_state == 7) && state_t == 1) {
+    if ((last_state == 8 || last_state == 2) && state_t == 1) {
         pause_btn.invalidate();
     }
 

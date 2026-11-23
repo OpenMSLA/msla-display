@@ -16,7 +16,7 @@
 #define ETA_UPDATE_SECONDS 3
 
 inline bool is_print_state(uint8_t s) {
-    return s == 1 || s == 2 || s == 7;
+    return s == 1 || s == 2 || s == 7 || s == 8;
 }
 
 /// Returns printer states
